@@ -27,6 +27,6 @@ export default class HolbertonClass {
     if (hint === 'string') {
       return this._location;
     }
-    retrun this;
+    return this;
   }
 }
