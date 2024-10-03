@@ -1,15 +1,7 @@
 export default class Airport {
-  constructor(code, name) {
-    this.code = code;
+  constructor(name, code) {
     this.name = name;
-  }
-
-  get code() {
-    return this._code;
-  }
-
-  set code(value) {
-    this._code = value;
+    this.code = code;
   }
 
   get name() {
@@ -18,6 +10,14 @@ export default class Airport {
 
   set name(value) {
     this._name = value;
+  }
+
+  get code() {
+    return this._code;
+  }
+
+  set code(value) {
+    this._code = value;
   }
 
   get [Symbol.toStringTag]() {
