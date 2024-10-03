@@ -11,7 +11,6 @@ export default class Pricing {
   }
 
   set amount(value) {
-    }
     this._amount = value;
   }
 
