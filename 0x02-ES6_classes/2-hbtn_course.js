@@ -1,71 +1,50 @@
 /**
  * Represents a Holberton Course.
  */
-export default class HolbertonCourse {
+export default class Currency {
   /**
-   * Creates a new @see {@link HolbertonCourse}.
+   * Creates a new @see {@link Currency}.
    *
-   * @param {String} name - The name of the course.
-   * @param {Number} length - How long the course is (in months).
-   * @param {String[]} students - The names of students in the course.
+   * @param {String} code - code.
+   * @param {String} name - name.
    */
-  constructor(name, length, students) {
+  constructor(code, name) {
+    this.code = code;
     this.name = name;
-    this.length = length;
-    this.students = students;
   }
 
   /**
-   * Gets the name of this course.
+   * Gets the code.
+   */
+  get code() {
+    return this._code;
+  }
+
+  /**
+   * Sets the code.
+   */
+  set code(value) {
+    this._code = value;
+  }
+
+  /**
+   * Gets the name.
    */
   get name() {
     return this._name;
   }
 
   /**
-   * Sets the name of this course.
+   * Sets the name.
    */
   set name(value) {
-    if (typeof value !== 'string') {
-      throw new TypeError('Name must be a string');
-    }
     this._name = value;
   }
 
   /**
-   * Gets the length of this course (in months).
+   * Creates the full string representation of this Currency.
+   * @returns {String}
    */
-  get length() {
-    return this._length;
-  }
-
-  /**
-   * Sets the length of this course (in months).
-   */
-  set length(value) {
-    if (typeof value !== 'number') {
-      throw new TypeError('Length must be a number');
-    }
-    this._length = value;
-  }
-
-  /**
-   * Gets the names of students in this course.
-   */
-  get students() {
-    return this._students;
-  }
-
-  /**
-   * Sets the names of students in this course.
-   */
-  set students(value) {
-    if (!(value instanceof Array)) {
-      throw new TypeError('Students must be an array of strings');
-    }
-    if (!value.every((student) => typeof student === 'string')) {
-      throw new TypeError('Students must be an array of strings');
-    }
-    this._students = value;
-  }
+  displayFullCurrency() {
+    return `${this._name} (${this._code})`
 }
