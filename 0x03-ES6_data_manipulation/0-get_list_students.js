@@ -1,4 +1,4 @@
-\0;276;0c/**
+/**
  * Retrieves a list of students.
  * @author Cherif Fadaly
  * @returns {{id: Number, firstName: String, location: String}[]}
