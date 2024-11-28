@@ -5,48 +5,43 @@ const fs = require('fs');
  * @param {String} filePath The path to the CSV data file.
  * @author Cherif Fadaly
  */
-const countStudents = (filePath) => {
-  if (!fs.existsSync(filePath)) {
-    throw new Error('Cannot load the database');
-  }
-  if (!fs.statSync(filePath).isFile()) {
-    throw new Error('Cannot load the database');
-  }
 
-  const linesInFile = fs
-    .readFileSync(filePath, 'utf-8')
-    .toString('utf-8')
-    .trim()
-    .split('\n');
-
-  const studentsByField = {};
-  const headers = linesInFile[0].split(',');
-  const studentProperties = headers.slice(0, headers.length - 1);
-
-  for (const line of linesInFile.slice(1)) {
-    const studentData = line.split(',');
-    const studentDetails = studentData.slice(0, studentData.length - 1);
-    const studentField = studentData[studentData.length - 1];
-
-    if (!Object.keys(studentsByField).includes(studentField)) {
-      studentsByField[studentField] = [];
+const countStudents = (filePath) => new Promise((resolve, reject) => {
+  fs.readFile(filePath, 'utf-8', (error, fileData) => {
+    if (error) {
+      reject(new Error('Cannot load the database'));
     }
+    if (fileData) {
+      const fileLines = fileData.toString('utf-8').trim().split('\n');
+      const studentsByField = {};
+      const headerFields = fileLines[0].split(',');
+      const studentFields = headerFields.slice(0, headerFields.length - 1);
 
-    const studentObject = studentProperties
-      .map((property, index) => [property, studentDetails[index]]);
-    studentsByField[studentField].push(Object.fromEntries(studentObject));
-  }
+      for (const line of fileLines.slice(1)) {
+        const studentData = line.split(',');
+        const studentFieldValues = studentData.slice(0, studentData.length - 1);
+        const fieldOfStudy = studentData[studentData.length - 1];
 
-  const totalStudentsCount = Object
-    .values(studentsByField)
-    .reduce((total, currentField) => (total || []).length + currentField.length);
+        if (!Object.keys(studentsByField).includes(fieldOfStudy)) {
+          studentsByField[fieldOfStudy] = [];
+        }
 
-  console.log(`Number of students: ${totalStudentsCount}`);
+        const studentEntries = studentFields.map((fieldName, idx) => [fieldName, studentFieldValues[idx]]);
+        studentsByField[fieldOfStudy].push(Object.fromEntries(studentEntries));
+      }
 
-  for (const [field, students] of Object.entries(studentsByField)) {
-    const studentFirstNames = students.map((student) => student.firstname).join(', ');
-    console.log(`Number of students in ${field}: ${students.length}. List: ${studentFirstNames}`);
-  }
-};
+      const totalStudents = Object.values(studentsByField)
+        .reduce((count, group) => count + group.length, 0);
+
+      console.log(`Number of students: ${totalStudents}`);
+      for (const [field, students] of Object.entries(studentsByField)) {
+        const studentNames = students.map((student) => student.firstname).join(', ');
+        console.log(`Number of students in ${field}: ${students.length}. List: ${studentNames}`);
+      }
+
+      resolve(true);
+    }
+  });
+});
 
 module.exports = countStudents;
